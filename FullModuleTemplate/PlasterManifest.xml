@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest
+  schemaVersion="1.0" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>FullModuleTemplate</name>
+    <id>abe7c8b0-2b42-4db8-8bfc-f4a61487d29c</id>
+    <version>0.0.1</version>
+    <title>Full Module Template</title>
+    <description></description>
+    <author>Kevin Marquette</author>
+    <tags></tags>
+  </metadata>
+  <parameters></parameters>
+  <content>
+    <message>
+      Creating folder structure
+    </message>
+    <file source='' destination='\docs\images'/>
+    <file source='' destination='\tests'/>
+    <file source='' destination='\spec'/>
+    <file source='' destination='\tests'/>
+    <file source='' destination='\${PLASTER_PARAM_ModuleName}\public'/>
+    <file source='' destination='\${PLASTER_PARAM_ModuleName}\private'/>
+    <file source='' destination='\${PLASTER_PARAM_ModuleName}\classes'/>
+    <file source='' destination='\${PLASTER_PARAM_ModuleName}\data'/>
+
+     <message>
+      Deploying common files
+    </message>
+    <file source='\root\appveyor.yml' destination='\'/>
+    <file source='\root\build.ps1'    destination='\'/>
+    <file source='\root\mkdocs.yml'   destination='\'/>
+    <file source='\root\PITCHME.md'   destination='\'/>
+    <file source='\root\psake.ps1'    destination='\'/>
+
+    <file source='\root\docs\about.md' destination='\docs'/>
+    <file source='\root\docs\acknowledgements.md' destination='\docs'/>
+    <file source='\root\docs\index.md' destination='\docs'/>
+    <file source='\root\docs\Quick-Start-Installation-and-Example.md' destination='\docs'/>
+
+    <file source='\root\tests\Project.Tests.ps1' destination='\tests'/>
+    <file source='\root\tests\Help.Tests.ps1' destination='\tests'/>
+    <file source='\root\tests\Feature.Tests.ps1' destination='\tests'/>
+    <file source='\root\tests\Regression.Tests.ps1' destination='\tests'/>
+    <file source='\root\tests\Unit.Tests.ps1' destination='\tests'/>
+
+    <file source='\root\spec\module.feature' destination='\spec'/>
+    <file source='\root\spec\module.Steps.ps1' destination='\spec'/>
+    
+    <file source='\root\module.psm1' destination='\${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psm1'/>
+
+    <newModuleManifest 
+      destination='\${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psd1'
+      moduleVersion='$PLASTER_PARAM_Version'
+      rootModule='${PLASTER_PARAM_ModuleName}.psm1'
+      author='$PLASTER_PARAM_FullName'
+      description='$PLASTER_PARAM_ModuleDesc'
+      encoding='UTF8-NoBOM'/>
+
+  </content>
+</plasterManifest>
