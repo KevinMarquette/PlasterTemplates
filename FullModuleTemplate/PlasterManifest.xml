@@ -14,7 +14,9 @@
     <parameter name="FullName" type="text" prompt="Module author's' name" />
     <parameter name="ModuleName" type="text" prompt="Name of your module" />
     <parameter name="ModuleDesc" type="text" prompt="Brief description on this module" />
-    <parameter name="Version" type="text" prompt="Initial module version" default="0.0.1"/>
+    <parameter name="Version" type="text" prompt="Initial module version" default="0.0.1" />
+    <parameter name="GitHubUserName" type="text" prompt="GitHub username" default="${PLASTER_PARAM_FullName}"/>
+    <parameter name="GitHubRepo" type="text" prompt="Github repo name for this module" default="${PLASTER_PARAM_ModuleName}"/>
   </parameters>
   <content>
     <message>      Creating folder structure    </message>
@@ -29,19 +31,19 @@
     <message>      Deploying common files    </message>
     <file source='appveyor.yml' destination=''/>
     <file source='build.ps1' destination=''/>
-    <file source='mkdocs.yml' destination=''/>
+    <templateFile source='mkdocs.yml' destination=''/>
     <file source='PITCHME.md' destination=''/>
     <file source='psake.ps1' destination=''/>
-    <file source='docs\about.md' destination=''/>
+    <templateFile source='docs\about.md' destination=''/>
     <file source='docs\acknowledgements.md' destination=''/>
-    <file source='docs\index.md' destination=''/>
-    <file source='docs\Quick-Start-Installation-and-Example.md' destination=''/>
+    <templateFile source='docs\index.md' destination=''/>
+    <templateFile source='docs\Quick-Start-Installation-and-Example.md' destination=''/>
     <file source='tests\Project.Tests.ps1' destination=''/>
     <file source='tests\Help.Tests.ps1' destination=''/>
     <file source='tests\Feature.Tests.ps1' destination=''/>
     <file source='tests\Regression.Tests.ps1' destination=''/>
     <file source='tests\Unit.Tests.ps1' destination=''/>
-    <file source='spec\module.feature' destination=''/>
+    <templateFile source='spec\module.feature' destination=''/>
     <file source='spec\module.Steps.ps1' destination=''/>
     <file source='module\module.psm1' destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psm1'/>
     <newModuleManifest destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psd1' moduleVersion='$PLASTER_PARAM_Version' rootModule='${PLASTER_PARAM_ModuleName}.psm1' author='$PLASTER_PARAM_FullName' description='$PLASTER_PARAM_ModuleDesc' encoding='UTF8-NoBOM'/>

@@ -4,7 +4,7 @@ Feature: A proper community module
     I want to make sure everything works and the quality is high
 
 Background: we have a module
-    Given the module was named PSGraph
+    Given the module was named <%= $PLASTER_PARAM_ModuleName %>
 
 
 Scenario: Should have correct project structure and files
