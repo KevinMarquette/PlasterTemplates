@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest schemaVersion="1.0" 
+  xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>GetPlastered</name>
+    <id>6e151d68-417a-46a9-baf8-12301b99a79a</id>
+    <version>0.0.1</version>
+    <title>Generate Plaster Maifest</title>
+    <description></description>
+    <author>Kevin Marquette</author>
+    <tags></tags>
+  </metadata>
+  <parameters>
+    <parameter name="TemplateName" type="text" prompt="Template  Name" default="${PLASTER_DestinationName}"/>
+    <parameter name="TemplateTitlee" type="text" prompt="Template Title" default="${PLASTER_PARAM_TemplateName}" />
+    <parameter name="TemplateAuthor" type="user-fullname" prompt="Author"/>
+  </parameters>
+  <content>
+    <templateFile source="PlasterTemplate.aps1" destination="PlasterManifest.xml" />
+  </content>
+</plasterManifest>

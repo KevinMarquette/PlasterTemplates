@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest schemaVersion="1.0" 
+  xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name><%= $PLASTER_PARAM_TemplateName %></name>
+    <id><%= $PLASTER_GUID1 %></id>
+    <version>0.0.1</version>
+    <title><%= $PLASTER_PARAM_TemplateTitle %></title>
+    <description></description>
+    <author><%= $PLASTER_PARAM_TemplateAuthor %></author>
+    <tags></tags>
+  </metadata>
+  <parameters>
+  </parameters>
+  <content>
+<%
+  $path = $PLASTER_DestinationPath
+
+  $folders = Get-ChildItem -Path $path -Directory -Recurse
+  $files = Get-ChildItem -Path $path -File -Recurse
+
+  $path += '\'  
+
+  foreach($node in $folders.fullname)
+  {
+      $destination = $node.replace($path,'')
+"    <file source='' destination='$destination'/>" 
+  }
+
+  foreach($node in $files.fullname)
+  {
+      $source = $node.replace($path,'')
+"    <file source='$source' destination=''/>" 
+  }
+
+%>
+  </content>
+</plasterManifest>
