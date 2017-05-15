@@ -34,5 +34,6 @@
   }
 
 %>
+  <templateFile source="PlasterManifest.xml" destination="" />
   </content>
 </plasterManifest>
