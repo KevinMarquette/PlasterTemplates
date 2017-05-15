@@ -8,7 +8,7 @@
     <title><%= $PLASTER_PARAM_TemplateTitle %></title>
     <description></description>
     <author><%= $PLASTER_PARAM_TemplateAuthor %></author>
-    <tags></tags>
+    <tags>GetPlastered</tags>
   </metadata>
   <parameters>
   </parameters>
