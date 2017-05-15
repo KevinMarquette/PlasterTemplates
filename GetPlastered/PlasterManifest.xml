@@ -12,7 +12,7 @@
   </metadata>
   <parameters>
     <parameter name="TemplateName" type="text" prompt="Template  Name" default="${PLASTER_DestinationName}"/>
-    <parameter name="TemplateTitlee" type="text" prompt="Template Title" default="${PLASTER_PARAM_TemplateName}" />
+    <parameter name="TemplateTitle" type="text" prompt="Template Title" default="${PLASTER_PARAM_TemplateName}" />
     <parameter name="TemplateAuthor" type="user-fullname" prompt="Author"/>
   </parameters>
   <content>
