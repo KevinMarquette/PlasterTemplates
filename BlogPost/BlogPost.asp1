@@ -1,0 +1,21 @@
+---
+layout: post
+title: "Powershell: <%= $PLASTER_PARAM_title %>"
+date: <%= $PLASTER_PARAM_Date %>
+tags: [<%= $PLASTER_PARAM_Tags %>]
+---
+
+
+# Index
+
+* TOC
+{:toc}
+
+# Getting Started
+
+
+# Putting it all together
+
+
+# What's next?
+

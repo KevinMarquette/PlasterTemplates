@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest schemaVersion="1.0" 
+  xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>BlogPost</name>
+    <id>a22bb4ac-783a-40c1-beef-9ec4c89e378a</id>
+    <version>0.0.1</version>
+    <title>Blog Post Template</title>
+    <description></description>
+    <author>Kevin Marquette</author>
+    <tags></tags>
+  </metadata>
+  <parameters>
+    <parameter name="Title" type="text" prompt="Title" />
+    <parameter name="FileName" type="text" prompt="FileName" default="$(${PLASTER_PARAM_Title}.replace(' ','-'))"/>
+    <parameter name="Tags" type="text" prompt="Tags" default="PowerShell"/>
+    <parameter name="Date" type="text" prompt="Publish Date" default="$(get-date -Format yyyy-MM-dd)" />
+  </parameters>
+  <content>
+    <file source='' destination='_draft'/>
+    <templateFile source="BlogPost.asp1" destination='_draft\${PLASTER_PARAM_Date}-Powershell-${PLASTER_PARAM_FileName}.md'/>
+  </content>
+</plasterManifest>
