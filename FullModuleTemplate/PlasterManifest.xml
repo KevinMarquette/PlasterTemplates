@@ -33,16 +33,17 @@
     <file source='build.ps1' destination=''/>
     <templateFile source='mkdocs.yml' destination=''/>
     <file source='PITCHME.md' destination=''/>
-    <file source='psake.ps1' destination=''/>
+    <file source='deploy.PSDeploy.ps1' destination=''/>
+    <templateFile source='module.build.ps1' destination=''/>
     <templateFile source='docs\about.md' destination=''/>
     <file source='docs\acknowledgements.md' destination=''/>
     <templateFile source='docs\index.md' destination=''/>
     <templateFile source='docs\Quick-Start-Installation-and-Example.md' destination=''/>
-    <file source='tests\Project.Tests.ps1' destination=''/>
-    <file source='tests\Help.Tests.ps1' destination=''/>
-    <file source='tests\Feature.Tests.ps1' destination=''/>
-    <file source='tests\Regression.Tests.ps1' destination=''/>
-    <file source='tests\Unit.Tests.ps1' destination=''/>
+    <templatefile source='tests\Project.Tests.ps1' destination=''/>
+    <templatefile source='tests\Help.Tests.ps1' destination=''/>
+    <templatefile source='tests\Feature.Tests.ps1' destination=''/>
+    <templatefile source='tests\Regression.Tests.ps1' destination=''/>
+    <templatefile source='tests\Unit.Tests.ps1' destination=''/>
     <templateFile source='spec\module.feature' destination=''/>
     <file source='spec\module.Steps.ps1' destination=''/>
     <file source='module\module.psm1' destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psm1'/>

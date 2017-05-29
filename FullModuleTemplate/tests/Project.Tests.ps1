@@ -1,12 +1,11 @@
 $projectRoot = Resolve-Path "$PSScriptRoot\.."
-$moduleRoot = Split-Path (Resolve-Path "$projectRoot\*\*.psd1")
-$moduleName = Split-Path $moduleRoot -Leaf
-
+$script:ModuleName = '<%= $PLASTER_PARAM_ModuleName %>'
+$moduleRoot = "$projectRoot\$ModuleName"
 
 Describe "PSScriptAnalyzer rule-sets" -Tag Build {
 
-    $Rules   = Get-ScriptAnalyzerRule
-    $scripts = Get-ChildItem $moduleRoot -Include *.ps1,*.psm1,*.psd1 -Recurse | where fullname -notmatch 'classes'
+    $Rules = Get-ScriptAnalyzerRule
+    $scripts = Get-ChildItem $moduleRoot -Include *.ps1, *.psm1, *.psd1 -Recurse | where fullname -notmatch 'classes'
 
     foreach ( $Script in $scripts ) 
     {

@@ -1,14 +1,11 @@
 $projectRoot = Resolve-Path "$PSScriptRoot\.."
-$moduleRoot = Split-Path (Resolve-Path "$projectRoot\*\*.psm1")
-$moduleName = Split-Path $moduleRoot -Leaf
-
-Import-Module (Join-Path $moduleRoot "$moduleName.psm1") -force
+$script:ModuleName = '<%= $PLASTER_PARAM_ModuleName %>'
 
 Describe "Help tests for $moduleName" -Tags Build {
 
     $functions = Get-Command -Module $moduleName
-    $help = $functions | %{Get-Help $_.name}
-    foreach($node in $help)
+    $help = $functions | % {Get-Help $_.name}
+    foreach ($node in $help)
     {
         Context $node.name {
 
@@ -16,11 +13,11 @@ Describe "Help tests for $moduleName" -Tags Build {
                 $node.description | Should Not BeNullOrEmpty
             }
             it "has an example" {
-                 $node.examples | Should Not BeNullOrEmpty
+                $node.examples | Should Not BeNullOrEmpty
             }
-            foreach($parameter in $node.parameters.parameter)
+            foreach ($parameter in $node.parameters.parameter)
             {
-                if($parameter -notmatch 'whatif|confirm')
+                if ($parameter -notmatch 'whatif|confirm')
                 {
                     it "parameter $($parameter.name) has a description" {
                         $parameter.Description.text | Should Not BeNullOrEmpty
