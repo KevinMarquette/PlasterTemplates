@@ -11,12 +11,12 @@
     <tags></tags>
   </metadata>
   <parameters>
-    <parameter name="FullName" type="text" prompt="Module author's' name" />
-    <parameter name="ModuleName" type="text" prompt="Name of your module" />
-    <parameter name="ModuleDesc" type="text" prompt="Brief description on this module" />
-    <parameter name="Version" type="text" prompt="Initial module version" default="0.0.1" />
-    <parameter name="GitHubUserName" type="text" prompt="GitHub username" default="${PLASTER_PARAM_FullName}"/>
+    <parameter name="ModuleName" type="text" prompt="Name of your module" default="${PLASTER_DestinationName}"/>
+    <parameter name="ModuleDesc" type="text" prompt="Brief description on this module" default="${PLASTER_ModuleName}"/>
     <parameter name="GitHubRepo" type="text" prompt="Github repo name for this module" default="${PLASTER_PARAM_ModuleName}"/>
+    <parameter name="GitHubUserName" type="user-fullname" prompt="GitHub username" default="${PLASTER_PARAM_FullName}"/>
+    <parameter name="FullName" type="text" prompt="Module author's' name" default="${PLASTER_PARAM_GitHubUserName}"/>
+    <parameter name="Version" type="text" prompt="Initial module version" default="0.0.1" />
   </parameters>
   <content>
     <message>      Creating folder structure    </message>
@@ -24,11 +24,12 @@
     <file source='' destination='tests'/>
     <file source='' destination='spec'/>
     <file source='' destination='tests'/>
+    <file source='' destination='.vscode'/>
     <file source='' destination='${PLASTER_PARAM_ModuleName}\public'/>
     <file source='' destination='${PLASTER_PARAM_ModuleName}\private'/>
     <file source='' destination='${PLASTER_PARAM_ModuleName}\classes'/>
     <file source='' destination='${PLASTER_PARAM_ModuleName}\data'/>
-    <message>      Deploying common files    </message>
+    <message>      Deploying files    </message>
     <file source='appveyor.yml' destination=''/>
     <file source='build.ps1' destination=''/>
     <templateFile source='mkdocs.yml' destination=''/>
@@ -39,12 +40,14 @@
     <file source='docs\acknowledgements.md' destination=''/>
     <templateFile source='docs\index.md' destination=''/>
     <templateFile source='docs\Quick-Start-Installation-and-Example.md' destination=''/>
-    <templatefile source='tests\Project.Tests.ps1' destination=''/>
-    <templatefile source='tests\Help.Tests.ps1' destination=''/>
-    <templatefile source='tests\Feature.Tests.ps1' destination=''/>
-    <templatefile source='tests\Regression.Tests.ps1' destination=''/>
-    <templatefile source='tests\Unit.Tests.ps1' destination=''/>
+    <templateFile source='tests\Project.Tests.ps1' destination=''/>
+    <templateFile source='tests\Help.Tests.ps1' destination=''/>
+    <templateFile source='tests\Feature.Tests.ps1' destination=''/>
+    <templateFile source='tests\Regression.Tests.ps1' destination=''/>
+    <templateFile source='tests\Unit.Tests.ps1' destination=''/>
     <templateFile source='spec\module.feature' destination=''/>
+    <file source='.gitignore' destination=''/>
+    <file source='.vscode\settings.json' destination=''/>
     <file source='spec\module.Steps.ps1' destination=''/>
     <file source='module\module.psm1' destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psm1'/>
     <newModuleManifest destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psd1' moduleVersion='$PLASTER_PARAM_Version' rootModule='${PLASTER_PARAM_ModuleName}.psm1' author='$PLASTER_PARAM_FullName' description='$PLASTER_PARAM_ModuleDesc' encoding='UTF8-NoBOM'/>
