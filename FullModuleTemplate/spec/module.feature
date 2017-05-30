@@ -67,9 +67,11 @@ Scenario: Should be well documented
     
 @PSScriptAnalyzer @Slow
 Scenario: Should pass PSScriptAnalyzer rules
-    Given we use the module root folder    
+    Given we use the ModuleSource root folder    
     Then it will have a public\*.ps1 file for a public function
     And all script files pass PSScriptAnalyzer rules
+    When we use the ModuleOutput root folder
+    Then all script files pass PSScriptAnalyzer rules
     
 @Slow
 Scenario: Should be published
