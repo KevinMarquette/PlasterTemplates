@@ -5,6 +5,7 @@ date: <%= $PLASTER_PARAM_Date %>
 tags: [<%= $PLASTER_PARAM_Tags %>]
 ---
 
+<!--more-->
 
 # Index
 
