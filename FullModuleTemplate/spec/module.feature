@@ -15,7 +15,9 @@ Scenario: Should have correct project structure and files
     And it will have a spec\*.feature file for Gherkin
     And it will have a spec\*.Steps.ps1 file for Gherkin
     And it will have a build.ps1 file for builds
-    And it will have a psake.ps1 file for builds
+    And it will have a *.build.ps1 file for builds
+    And it will have a *.PSDeploy.ps1 file for deployments
+    And it will have a .gitignore file to ignore build artifacts
     And it will have a appveyor.yml file for build automation
 
 
