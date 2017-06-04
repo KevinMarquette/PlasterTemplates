@@ -3,8 +3,8 @@ repo_url: https://github.com/<%= $PLASTER_PARAM_GitHubUserName %>/<%= $PLASTER_P
 theme: readthedocs
 pages:
 - Home: index.md
-- PSGraph Basics:
-  - What is PSGraph: about.md
+- <%= $PLASTER_PARAM_ModuleName %> Basics:
+  - What is <%= $PLASTER_PARAM_ModuleName %>: about.md
   - Quick Start: Quick-Start-Installation-and-Example.md
 - Basic Commands:
 - Examples:

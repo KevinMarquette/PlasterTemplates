@@ -102,7 +102,7 @@ Then 'will be listed in the PSGallery' {
 
 Given 'we have (?<folder>(public)) functions?' {
     param($folder)
-    "$psscriptroot\..\psgraph\$folder\*.ps1" | Should Exist
+    "$psscriptroot\..\*\$folder\*.ps1" | Should Exist
 }
 
 Then 'all script files pass PSScriptAnalyzer rules' {

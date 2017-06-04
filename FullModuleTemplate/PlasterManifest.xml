@@ -4,7 +4,7 @@
   <metadata>
     <name>FullModuleTemplate</name>
     <id>abe7c8b0-2b42-4db8-8bfc-f4a61487d29c</id>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <title>Full Module Template</title>
     <description></description>
     <author>Kevin Marquette</author>
@@ -32,12 +32,17 @@
     <message>      Deploying files    </message>
     <file source='appveyor.yml' destination=''/>
     <file source='build.ps1' destination=''/>
-    <templateFile source='mkdocs.yml' destination=''/>
-    <file source='PITCHME.md' destination=''/>
     <file source='deploy.PSDeploy.ps1' destination=''/>
+    <file source='.gitignore' destination=''/>
+    <file source='.vscode\settings.json' destination=''/>
+    <file source='spec\module.Steps.ps1' destination=''/>
+    <templateFile source='mkdocs.yml' destination=''/>
+    <templateFile source='PITCHME.md' destination=''/>
+    <templateFile source='readme.md' destination=''/>
+    <templateFile source='LICENSE' destination=''/>
     <templateFile source='module.build.ps1' destination=''/>
     <templateFile source='docs\about.md' destination=''/>
-    <file source='docs\acknowledgements.md' destination=''/>
+    <templateFile source='docs\acknowledgements.md' destination=''/>
     <templateFile source='docs\index.md' destination=''/>
     <templateFile source='docs\Quick-Start-Installation-and-Example.md' destination=''/>
     <templateFile source='tests\Project.Tests.ps1' destination=''/>
@@ -46,9 +51,6 @@
     <templateFile source='tests\Regression.Tests.ps1' destination=''/>
     <templateFile source='tests\Unit.Tests.ps1' destination=''/>
     <templateFile source='spec\module.feature' destination=''/>
-    <file source='.gitignore' destination=''/>
-    <file source='.vscode\settings.json' destination=''/>
-    <file source='spec\module.Steps.ps1' destination=''/>
     <file source='module\module.psm1' destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psm1'/>
     <newModuleManifest destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psd1' moduleVersion='$PLASTER_PARAM_Version' rootModule='${PLASTER_PARAM_ModuleName}.psm1' author='$PLASTER_PARAM_FullName' description='$PLASTER_PARAM_ModuleDesc' encoding='UTF8-NoBOM'/>
   </content>
