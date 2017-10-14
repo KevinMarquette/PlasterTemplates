@@ -87,21 +87,44 @@ Task NextPSGalleryVersion -if (-Not ( Test-Path "$output\version.xml" ) ) -Befor
 }
 
 Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $ManifestPath {
-   
+    
     Write-Output "  Update [$ManifestPath]"
     Copy-Item "$source\$ModuleName.psd1" -Destination $ManifestPath
-
-    $bumpVersionType = 'Patch'
-
+ 
+ 
     $functions = Get-ChildItem "$ModuleName\Public\*.ps1" | Where-Object { $_.name -notmatch 'Tests'} | Select-Object -ExpandProperty basename      
-
-    $oldFunctions = (Get-Metadata -Path $manifestPath -PropertyName 'FunctionsToExport')
-
-    $functions | Where {$_ -notin $oldFunctions } | % {$bumpVersionType = 'Minor'}
-    $oldFunctions | Where {$_ -notin $Functions } | % {$bumpVersionType = 'Major'}
-
     Set-ModuleFunctions -Name $ManifestPath -FunctionsToExport $functions
-
+ 
+    Write-Output "  Detecting semantic versioning"
+ 
+    Import-Module ".\$ModuleName"
+    $commandList = Get-Command -Module $ModuleName
+    Remove-Module $ModuleName
+ 
+    Write-Output "    Calculating fingerprint"
+    $fingerprint = foreach ($command in $commandList )
+    {
+        foreach ($parameter in $command.parameters.keys)
+        {
+            '{0}:{1}' -f $command.name, $command.parameters[$parameter].Name
+            $command.parameters[$parameter].aliases | Foreach-Object { '{0}:{1}' -f $command.name, $_}
+        }
+    }
+     
+    if (Test-Path .\fingerprint)
+    {
+        $oldFingerprint = Get-Content .\fingerprint
+    }
+ 
+     
+    $bumpVersionType = 'Patch'
+    '    Detecting new features'
+    $fingerprint | Where {$_ -notin $oldFingerprint } | % {$bumpVersionType = 'Minor'; "      $_"}    
+    '    Detecting breaking changes'
+    $oldFingerprint | Where {$_ -notin $fingerprint } | % {$bumpVersionType = 'Major'; "      $_"}
+ 
+    Set-Content -Path .\fingerprint -Value $fingerprint
+ 
     # Bump the module version
     $version = [version] (Get-Metadata -Path $manifestPath -PropertyName 'ModuleVersion')
     $galleryVersion = Import-Clixml -Path "$output\version.xml"
@@ -112,9 +135,9 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
     Write-Output "  Stepping [$bumpVersionType] version [$version]"
     $version = [version] (Step-Version $version -Type $bumpVersionType)
     Write-Output "  Using version: $version"
-    
+     
     Update-Metadata -Path $ManifestPath -PropertyName ModuleVersion -Value $version
-}
+} 
 
 Task UpdateSource {
     Copy-Item $ManifestPath -Destination "$source\$ModuleName.psd1"
