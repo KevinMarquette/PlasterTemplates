@@ -115,7 +115,6 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
     {
         $oldFingerprint = Get-Content .\fingerprint
     }
- 
      
     $bumpVersionType = 'Patch'
     '    Detecting new features'
@@ -127,6 +126,20 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
  
     # Bump the module version
     $version = [version] (Get-Metadata -Path $manifestPath -PropertyName 'ModuleVersion')
+
+    if ( $version -lt ([version]'1.0.0') )
+    {
+        '    Still in beta, don''t bump major version'
+        if ( $bumpVersionType -eq 'Major'  )
+        {
+            $bumpVersionType = 'Minor'
+        }
+        else 
+        {
+            $bumpVersionType = 'Patch'
+        }       
+    }
+
     $galleryVersion = Import-Clixml -Path "$output\version.xml"
     if ( $version -lt $galleryVersion )
     {
