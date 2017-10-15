@@ -16,7 +16,7 @@
     <parameter name="GitHubRepo" type="text" prompt="Github repo name for this module" default="${PLASTER_PARAM_ModuleName}"/>
     <parameter name="GitHubUserName" type="user-fullname" prompt="GitHub username" default="${PLASTER_PARAM_FullName}"/>
     <parameter name="FullName" type="text" prompt="Module author's' name" default="${PLASTER_PARAM_GitHubUserName}"/>
-    <parameter name="Version" type="text" prompt="Initial module version" default="0.0.1" />
+    <parameter name="Version" type="text" prompt="Initial module version" default="0.1.0" />
   </parameters>
   <content>
     <message>      Creating folder structure    </message>
