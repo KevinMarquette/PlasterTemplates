@@ -8,14 +8,25 @@ Derived from scripts written by Warren F. (RamblingCookieMonster)
 param ($Task = 'Default')
 Write-Output "Starting build"
 
-# Grab nuget bits, install modules, set build variables, start build.
-Write-Output "  Install Dependent Modules"
-Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
-Install-Module InvokeBuild, PSDeploy, BuildHelpers, PSScriptAnalyzer -force -Scope CurrentUser
-Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+if (-not (Get-PackageProvider -Name Nuget -EA SilentlyContinue))
+{
+    Write-Output "  Install Nuget PS package provider"
+    Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
+}
 
-Write-Output "  Import Dependent Modules"
-Import-Module InvokeBuild, BuildHelpers, PSScriptAnalyzer
+# Grab nuget bits, install modules, set build variables, start build.
+Write-Output "  Install And Import Dependent Modules"
+Write-Output "    Build Modules"
+$psDependVersion = '0.1.56'
+if (-not(Get-InstalledModule PSDepend -RequiredVersion $psDependVersion -EA SilentlyContinue))
+{
+    Install-Module PSDepend -RequiredVersion $psDependVersion -Scope CurrentUser
+}
+Import-Module PSDepend -RequiredVersion $psDependVersion
+Invoke-PSDepend -Path "$PSScriptRoot\build.depend.psd1" -Install -Import -Force
+
+Write-Output "    SUT Modules"
+Invoke-PSDepend -Path "$PSScriptRoot\test.depend.psd1" -Install -Import -Force
 
 Set-BuildEnvironment
 
