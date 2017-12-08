@@ -29,6 +29,7 @@ Write-Output "    SUT Modules"
 Invoke-PSDepend -Path "$PSScriptRoot\test.depend.psd1" -Install -Import -Force
 
 Set-BuildEnvironment
+$global:SUTPath = $env:BHPSModuleManifest
 
 Write-Output "  InvokeBuild"
 Invoke-Build $Task -Result result

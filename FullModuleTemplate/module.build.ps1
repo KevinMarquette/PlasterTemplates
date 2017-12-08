@@ -7,6 +7,7 @@ $script:ModulePath = "$Destination\$ModuleName.psm1"
 $script:ManifestPath = "$Destination\$ModuleName.psd1"
 $script:Imports = ( 'private', 'public', 'classes' )
 $script:TestFile = "$PSScriptRoot\output\TestResults_PS$PSVersion`_$TimeStamp.xml"
+$global:SUTPath = $script:ManifestPath
 
 Task Default Build, Pester, UpdateSource, Publish
 Task Build CopyToOutput, BuildPSM1, BuildPSD1

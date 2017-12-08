@@ -1,6 +1,5 @@
-$projectRoot = Resolve-Path "$PSScriptRoot\.."
-$script:ModuleName = '<%= $PLASTER_PARAM_ModuleName %>'
-$moduleRoot = "$projectRoot\$ModuleName"
+$script:ModuleName = $env:BHProjectName
+$moduleRoot = $env:BHModulePath
 
 Describe "PSScriptAnalyzer rule-sets" -Tag Build {
 
@@ -26,6 +25,6 @@ Describe "PSScriptAnalyzer rule-sets" -Tag Build {
 Describe "General project validation: $moduleName" -Tags Build {
 
     It "Module '$moduleName' can import cleanly" {
-        {Import-Module (Join-Path $moduleRoot "$moduleName.psm1") -force } | Should Not Throw
+        {Import-Module ($global:SUTPath) -force } | Should Not Throw
     }
 }
