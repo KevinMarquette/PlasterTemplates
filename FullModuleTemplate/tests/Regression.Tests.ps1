@@ -1,7 +1,9 @@
-$projectRoot = Resolve-Path "$PSScriptRoot\.."
-$script:ModuleName = '<%= $PLASTER_PARAM_ModuleName %>'
-
 Describe "Regression tests" -Tag Build {
+
+    BeforeAll {
+        Get-Module ($env:BHProjectName) -All | Remove-Module
+        Import-Module ($global:SUTPath)
+    }
 
     Context "Github Issues" {
        

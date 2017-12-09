@@ -1,7 +1,11 @@
-$projectRoot = Resolve-Path "$PSScriptRoot\.."
-$script:ModuleName = '<%= $PLASTER_PARAM_ModuleName %>'
+$moduleName = $env:BHProjectName
 
 Describe "Help tests for $moduleName" -Tags Build {
+
+    BeforeAll {
+        Get-Module $moduleName -All | Remove-Module
+        Import-Module ($global:SUTPath)
+    }
 
     $functions = Get-Command -Module $moduleName
     $help = $functions | % {Get-Help $_.name}

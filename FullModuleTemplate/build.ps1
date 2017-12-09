@@ -39,6 +39,7 @@ if (-not (Get-Item env:\BH*))
 {
     Set-BuildEnvironment
 }
+$global:SUTPath = $env:BHPSModuleManifest
 
 if ($Task -eq 'init') 
 {
