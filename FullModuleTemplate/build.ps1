@@ -6,7 +6,14 @@ Derived from scripts written by Warren F. (RamblingCookieMonster)
 
 [cmdletbinding()]
 param ($Task = 'Default')
-Write-Output "Starting build"
+if ($Task -eq 'init')
+{
+    Write-Output "Starting build (init only)"
+} 
+else 
+{
+    Write-Output "Starting build"
+}
 
 if (-not (Get-PackageProvider -Name Nuget -EA SilentlyContinue))
 {
@@ -28,7 +35,16 @@ Invoke-PSDepend -Path "$PSScriptRoot\build.depend.psd1" -Install -Import -Force
 Write-Output "    SUT Modules"
 Invoke-PSDepend -Path "$PSScriptRoot\test.depend.psd1" -Install -Import -Force
 
-Set-BuildEnvironment
+if (-not (Get-Item env:\BH*)) 
+{
+    Set-BuildEnvironment
+}
+
+if ($Task -eq 'init') 
+{
+    Write-Output "Build succeeded (init only)"
+    return
+}
 
 Write-Output "  InvokeBuild"
 Invoke-Build $Task -Result result
