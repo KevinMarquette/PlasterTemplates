@@ -24,6 +24,10 @@ Describe "PSScriptAnalyzer rule-sets" -Tag Build {
 
 Describe "General project validation: $moduleName" -Tags Build {
 
+    AfterAll {
+        Unload-SUT
+    }
+
     It "Module '$moduleName' can import cleanly" {
         {Import-Module ($global:SUTPath) -force } | Should Not Throw
     }
