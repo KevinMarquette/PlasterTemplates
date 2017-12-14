@@ -24,7 +24,7 @@ if (-not (Get-PackageProvider -Name Nuget -EA SilentlyContinue))
 # Grab nuget bits, install modules, set build variables, start build.
 Write-Output "  Install And Import Dependent Modules"
 Write-Output "    Build Modules"
-$psDependVersion = '0.1.56'
+$psDependVersion = '0.1.58'
 if (-not(Get-InstalledModule PSDepend -RequiredVersion $psDependVersion -EA SilentlyContinue))
 {
     Install-Module PSDepend -RequiredVersion $psDependVersion -Scope CurrentUser
