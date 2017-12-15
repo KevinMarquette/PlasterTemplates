@@ -1,8 +1,12 @@
 Describe "Regression tests" -Tag Build {
 
     BeforeAll {
-        Get-Module ($env:BHProjectName) -All | Remove-Module
+        Unload-SUT
         Import-Module ($global:SUTPath)
+    }
+
+    AfterAll {
+        Unload-SUT
     }
 
     Context "Github Issues" {

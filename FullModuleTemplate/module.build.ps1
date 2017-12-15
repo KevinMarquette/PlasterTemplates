@@ -11,7 +11,7 @@ $global:SUTPath = $script:ManifestPath
 
 Task Default Build, Pester, UpdateSource, Publish
 Task Build CopyToOutput, BuildPSM1, BuildPSD1
-Task Pester Build, ImportModule, UnitTests, FullTests
+Task Pester Build, UnitTests, FullTests
 
 Task Clean {
     $null = Remove-Item $Output -Recurse -ErrorAction Ignore
@@ -98,9 +98,14 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
  
     Write-Output "  Detecting semantic versioning"
  
+    # avoid error trying to load a module twice
+    Unload-SUT
+
     Import-Module ".\$ModuleName"
     $commandList = Get-Command -Module $ModuleName
-    Remove-Module $ModuleName
+    
+    # cleanup PS session
+    Unload-SUT
  
     Write-Output "    Calculating fingerprint"
     $fingerprint = foreach ($command in $commandList )
@@ -155,24 +160,6 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
 
 Task UpdateSource {
     Copy-Item $ManifestPath -Destination "$source\$ModuleName.psd1"
-}
-
-Task ImportModule {
-    if ( -Not ( Test-Path $ManifestPath ) )
-    {
-        Write-Output "  Modue [$ModuleName] is not built, cannot find [$ManifestPath]"
-        Write-Error "Could not find module manifest [$ManifestPath]. You may need to build the module first"
-    }
-    else
-    {
-        if (Get-Module $ModuleName)
-        {
-            Write-Output "  Unloading Module [$ModuleName] from previous import"
-            Remove-Module $ModuleName
-        }
-        Write-Output "  Importing Module [$ModuleName] from [$ManifestPath]"
-        Import-Module $ManifestPath -Force
-    }
 }
 
 Task Publish {

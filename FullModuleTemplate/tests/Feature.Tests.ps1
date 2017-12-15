@@ -1,7 +1,11 @@
 Describe "Basic function feature tests" -Tags Build {
 
     BeforeAll {
-        Get-Module ($env:BHProjectName) -All | Remove-Module
+        Unload-SUT
         Import-Module ($global:SUTPath)
+    }
+
+    AfterAll {
+        Unload-SUT
     }
 }

@@ -40,6 +40,7 @@ if (-not (Get-Item env:\BH*))
     Set-BuildEnvironment
 }
 $global:SUTPath = $env:BHPSModuleManifest
+. "$PSScriptRoot\tests\Unload-SUT.ps1"
 
 if ($Task -eq 'init') 
 {

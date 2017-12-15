@@ -3,8 +3,12 @@ $moduleName = $env:BHProjectName
 Describe "Help tests for $moduleName" -Tags Build {
 
     BeforeAll {
-        Get-Module $moduleName -All | Remove-Module
+        Unload-SUT
         Import-Module ($global:SUTPath)
+    }
+
+    AfterAll {
+        Unload-SUT
     }
 
     $functions = Get-Command -Module $moduleName
