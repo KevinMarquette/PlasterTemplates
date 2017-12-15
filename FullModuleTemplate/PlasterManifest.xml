@@ -36,6 +36,7 @@
     <file source='deploy.PSDeploy.ps1' destination=''/>
     <file source='test.depend.psd1' destination=''/>
     <file source='.gitignore' destination=''/>
+    <file source='.vscode\launch.json' destination=''/>
     <file source='.vscode\settings.json' destination=''/>
     <file source='spec\module.Steps.ps1' destination=''/>
     <templateFile source='mkdocs.yml' destination=''/>
