@@ -19,6 +19,7 @@ Scenario: Should have correct project structure and files
     And it will have a *.PSDeploy.ps1 file for deployments
     And it will have a .gitignore file to ignore build artifacts
     And it will have a appveyor.yml file for build automation
+    And it will have a .vsts-ci.yml file for build automation
 
 
 Scenario: Should have correct module structure in source
