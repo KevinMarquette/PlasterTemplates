@@ -53,6 +53,7 @@
     <templateFile source='tests\Feature.Tests.ps1' destination=''/>
     <templateFile source='tests\Regression.Tests.ps1' destination=''/>
     <templateFile source='tests\Unit.Tests.ps1' destination=''/>
+    <templateFile source='tests\Unload-SUT.ps1' destination=''/>
     <templateFile source='spec\module.feature' destination=''/>
     <file source='module\module.psm1' destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psm1'/>
     <newModuleManifest destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psd1' moduleVersion='$PLASTER_PARAM_Version' rootModule='${PLASTER_PARAM_ModuleName}.psm1' author='$PLASTER_PARAM_FullName' description='$PLASTER_PARAM_ModuleDesc' encoding='UTF8-NoBOM'/>
