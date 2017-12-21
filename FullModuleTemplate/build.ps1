@@ -21,6 +21,8 @@ if (-not (Get-PackageProvider -Name Nuget -EA SilentlyContinue))
     Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
 }
 
+$publishRepository = 'PSGallery'
+
 # Grab nuget bits, install modules, set build variables, start build.
 Write-Output "  Install And Import Dependent Modules"
 Write-Output "    Build Modules"
@@ -38,6 +40,7 @@ Invoke-PSDepend -Path "$PSScriptRoot\test.depend.psd1" -Install -Import -Force
 if (-not (Get-Item env:\BH*)) 
 {
     Set-BuildEnvironment
+    Set-Item env:\PublishRepository -Value $publishRepository
 }
 $global:SUTPath = $env:BHPSModuleManifest
 . "$PSScriptRoot\tests\Unload-SUT.ps1"
