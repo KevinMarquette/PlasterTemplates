@@ -83,7 +83,7 @@ Task BuildPSM1 -Inputs (Get-Item "$source\*\*.ps1") -Outputs $ModulePath {
 }
 
 Task NextPSGalleryVersion -if (-Not ( Test-Path "$output\version.xml" ) ) -Before BuildPSD1 {
-    $galleryVersion = Get-NextPSGalleryVersion -Name $ModuleName
+    $galleryVersion = Get-NextPSGalleryVersion -Name $ModuleName -Repository ($env:PublishRepository)
     $galleryVersion | Export-Clixml -Path "$output\version.xml"
 }
 
