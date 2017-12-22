@@ -9,7 +9,7 @@ $script:Imports = ( 'private', 'public', 'classes' )
 $script:TestFile = "$PSScriptRoot\output\TestResults_PS$PSVersion`_$TimeStamp.xml"
 $global:SUTPath = $script:ManifestPath
 
-Task Default Build, Pester, UpdateSource, Publish
+Task Default Build, Pester, Publish
 Task Build CopyToOutput, BuildPSM1, BuildPSD1
 Task Pester Build, UnitTests, FullTests
 
