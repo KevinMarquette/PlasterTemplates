@@ -31,7 +31,7 @@
     <file source='' destination='${PLASTER_PARAM_ModuleName}\data'/>
     <message>      Deploying files    </message>
     <file source='.vsts-ci.yml' destination=''/>
-    <file source='appveyor.yml' destination=''/>
+    <templateFile source='appveyor.yml' destination=''/>
     <file source='build.depend.psd1' destination=''/>
     <file source='build.ps1' destination=''/>
     <file source='deploy.PSDeploy.ps1' destination=''/>
