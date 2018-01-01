@@ -1,4 +1,4 @@
-$script:ModuleName = '<%= $PLASTER_PARAM_ModuleName %>'
+$script:ModuleName = $ENV:BHProjectName
 
 $script:Source = Join-Path $BuildRoot $ModuleName
 $script:Output = Join-Path $BuildRoot output
@@ -147,15 +147,21 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
     }
 
     $galleryVersion = Import-Clixml -Path "$output\version.xml"
+
     if ( $version -lt $galleryVersion )
     {
         $version = $galleryVersion
     }
-    Write-Output "  Stepping [$bumpVersionType] version [$version]"
-    $version = [version] (Step-Version $version -Type $bumpVersionType)
-    Write-Output "  Using version: $version"
-     
-    Update-Metadata -Path $ManifestPath -PropertyName ModuleVersion -Value $version
+    if ($version -eq $galleryVersion) {
+        Write-Output "  Stepping [$bumpVersionType] version [$version]"
+        $version = [version] (Step-Version $version -Type $bumpVersionType)
+        Write-Output "  Using version: $version"
+        Update-Metadata -Path $ManifestPath -PropertyName ModuleVersion -Value $version
+    }
+    else 
+    {
+        Write-Output "  Using version from $ModuleName.psd1: $version"
+    }
 } 
 
 Task UpdateSource {
