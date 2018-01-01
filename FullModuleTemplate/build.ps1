@@ -15,10 +15,11 @@ else
     Write-Output "Starting build"
 }
 
-if (-not (Get-PackageProvider -Name Nuget -EA SilentlyContinue))
+if (-not (Get-PackageProvider | ? Name -eq nuget))
 {
     Write-Output "  Install Nuget PS package provider"
     Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
+    Install-PackageProvider -Name NuGet -Force -Confirm:$false | Out-Null
 }
 
 $publishRepository = 'PSGallery'
