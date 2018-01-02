@@ -45,7 +45,7 @@
     <templateFile source='PITCHME.md' destination=''/>
     <templateFile source='readme.md' destination=''/>
     <templateFile source='LICENSE' destination=''/>
-    <templateFile source='module.build.ps1' destination=''/>
+    <file source='module.build.ps1' destination=''/>
     <templateFile source='docs\about.md' destination=''/>
     <templateFile source='docs\acknowledgements.md' destination=''/>
     <templateFile source='docs\index.md' destination=''/>
