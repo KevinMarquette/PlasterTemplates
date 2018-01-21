@@ -95,6 +95,8 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
  
     $functions = Get-ChildItem "$ModuleName\Public\*.ps1" | Where-Object { $_.name -notmatch 'Tests'} | Select-Object -ExpandProperty basename      
     Set-ModuleFunctions -Name $ManifestPath -FunctionsToExport $functions
+
+    Set-ModuleAliases -Name $ManifestPath
  
     Write-Output "  Detecting semantic versioning"
  
