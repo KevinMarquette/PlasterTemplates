@@ -18,7 +18,6 @@ else
 if (-not (Get-PackageProvider | ? Name -eq nuget))
 {
     Write-Output "  Install Nuget PS package provider"
-    Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
     Install-PackageProvider -Name NuGet -Force -Confirm:$false | Out-Null
 }
 
