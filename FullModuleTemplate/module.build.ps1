@@ -9,8 +9,9 @@ $script:Imports = ( 'private', 'public', 'classes' )
 $script:TestFile = "$PSScriptRoot\output\TestResults_PS$PSVersion`_$TimeStamp.xml"
 $global:SUTPath = $script:ManifestPath
 
+Task Init SetAsLocal, InstallSUT
 Task Default Build, Pester, Publish
-Task Build CopyToOutput, BuildPSM1, BuildPSD1
+Task Build InstallSUT, CopyToOutput, BuildPSM1, BuildPSD1
 Task Pester Build, UnitTests, FullTests
 
 function PublishTestResults
@@ -40,6 +41,15 @@ function PublishTestResults
             Write-Warning "Publish test result not implemented for build system '$($ENV:BHBuildSystem)'"
         }
     }
+}
+
+Task InstallSUT {
+    Invoke-PSDepend -Path "$PSScriptRoot\test.depend.psd1" -Install -Force
+}
+
+Task SetAsLocal {
+    # ensure source code rather than compiled code in the output directory is being debugged / tested
+    $global:SUTPath = $env:BHPSModuleManifest
 }
 
 Task Clean {
