@@ -5,11 +5,10 @@ queue: Hosted VS2017
 
 steps:
 - powershell: . .\build.ps1
-  continueOnError: true
   env:
     NugetApiKey: $(NugetApiKey)
 - task: PublishTestResults@2
   inputs:
     testRunner: NUnit
     testResultsFiles: output\TestResults*.xml
-  condition: in(variables['Agent.JobStatus'], 'Succeeded', 'PartiallySucceeded', 'Failed')
+  condition: succeededOrFailed()
