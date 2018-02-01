@@ -11,7 +11,7 @@ $global:SUTPath = $script:ManifestPath
 
 Task Init SetAsLocal, InstallSUT
 Task Default Build, Pester, Publish
-Task Build InstallSUT, CopyToOutput, BuildPSM1, BuildPSD1
+Task Build CopyToOutput, BuildPSM1, BuildPSD1, InstallSUT
 Task Pester Build, UnitTests, FullTests
 
 function PublishTestResults
