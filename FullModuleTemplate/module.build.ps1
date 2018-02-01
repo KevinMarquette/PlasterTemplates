@@ -14,6 +14,24 @@ Task Default Build, Pester, Publish
 Task Build InstallSUT, CopyToOutput, BuildPSM1, BuildPSD1
 Task Pester Build, UnitTests, FullTests
 
+function CalculateFingerprint {
+    param(
+        [Parameter(ValueFromPipeline)]
+        [System.Management.Automation.FunctionInfo[]] $CommandList
+    )
+
+    process {
+        $fingerprint = foreach ($command in $CommandList )
+        {
+            foreach ($parameter in $command.parameters.keys)
+            {
+                '{0}:{1}' -f $command.name, $command.parameters[$parameter].Name
+                $command.parameters[$parameter].aliases | Foreach-Object { '{0}:{1}' -f $command.name, $_}
+            }
+        }
+        $fingerprint
+    }
+}
 function PublishTestResults
 {
     param(
@@ -41,6 +59,63 @@ function PublishTestResults
             Write-Warning "Publish test result not implemented for build system '$($ENV:BHBuildSystem)'"
         }
     }
+}
+
+function Read-Module {
+    param (
+        [Parameter(Mandatory)]
+        [string] $Name,
+        [Parameter(Mandatory)]
+        [string] $Repository, 
+        [Parameter(Mandatory)]
+        [string] $Path)
+            
+    $reader = {
+        param (
+            [string] $Name,
+            [string] $Repository, 
+            [string] $Path)
+        try {
+            
+            # we need to ensure $Path is one of the locations that PS will look when resolving
+            # dependencies of the module it is being asked to import
+            $originalPath = Get-Item -Path Env:\PSModulePath | Select -Exp Value
+            $psModulePaths = $originalPath -split ';' | Where {$_ -ne $Path}
+            $revisedPath = ( @($Path) + @($psModulePaths) | Select -Unique ) -join ';'
+            Set-Item -Path Env:\PSModulePath -Value $revisedPath  -EA Stop
+
+            try {
+                Save-Module -Name $Name -Path $Path -Repository $Repository -RequiredVersion 1.0.0 -EA Stop
+                Import-Module "$Path\$Name" -PassThru -EA Stop
+            }
+            finally {
+                Set-Item -Path Env:\PSModulePath -Value $originalPath -EA Stop
+            }               
+        }
+        catch {
+            if ($_ -match "No match was found for the specified search criteria") {
+                @()
+            }
+            else {
+                $_
+            }
+        }
+    }
+
+    $params = @{
+        Name       = $Name
+        Repository = $Repository
+        Path       = $Path
+    }
+
+    # Create a runspace and run our $reader script to return the module requested
+    # The purpose of using a runspace is to avoid loading old/duplicate versions of modules
+    # into the current PS session and thus avoid any potential conflicts
+    $PowerShell = [Powershell]::Create()
+    [void]$PowerShell.AddScript($reader).AddParameters($params)
+
+    # return module
+    $PowerShell.Invoke()
 }
 
 Task InstallSUT {
@@ -124,23 +199,35 @@ Task BuildPSM1 -Inputs (Get-Item "$source\*\*.ps1") -Outputs $ModulePath {
     Set-Content -Path  $ModulePath -Value $stringbuilder.ToString() 
 }
 
-Task PublishedModuleVersion -if (-Not ( Test-Path "$output\version.xml" ) ) -Before BuildPSD1 {
-    $version = try
-    {
-        [version](Find-Module -Name $ModuleName -Repository ($env:PublishRepository) -ErrorAction Stop).Version
+Task PublishedModuleInfo -if (-Not ( Test-Path "$output\previous-module-info.xml" ) ) -Before BuildPSD1 {
+    $downloadPath = "$output\previous-vs"
+    if (-not(Test-Path $downloadPath)) {
+        New-Item $downloadPath -ItemType Directory | Out-Null
     }
-    catch
+
+    $previousModule = Read-Module -Name $ModuleName -Repository ($env:PublishRepository) -Path $downloadPath
+
+    if ($null -ne $previousModule -and $previousModule.GetType() -eq [System.Management.Automation.ErrorRecord])
     {
-        if ($_ -match "No match was found for the specified search criteria")
-        {
-            [System.Version]::new(0, 0, 1)
-        }
-        else
-        {
-            Write-Error $_
+        Write-Error $previousModule
+        return
+    }
+
+    $moduleInfo = if ($null -eq $previousModule) 
+    {
+        [PsCustomObject] @{
+            Version = [System.Version]::new(0, 0, 1)
+            Fingerprint = @()
         }
     }
-    $version | Export-Clixml -Path "$output\version.xml"
+    else 
+    {
+        [PsCustomObject] @{
+            Version = $previousModule.Version
+            Fingerprint = $previousModule.ExportedFunctions.Values | CalculateFingerprint
+        }
+    }
+    $moduleInfo | Export-Clixml -Path "$output\previous-module-info.xml"
 }
 
 Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $ManifestPath {
@@ -153,40 +240,27 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
     Set-ModuleFunctions -Name $ManifestPath -FunctionsToExport $functions
 
     Set-ModuleAliases -Name $ManifestPath
+
+    $previousModuleInfo = Import-Clixml -Path "$output\previous-module-info.xml"
  
     Write-Output "  Detecting semantic versioning"
  
     # avoid error trying to load a module twice
     Unload-SUT
-
-    Import-Module ".\$ModuleName"
-    $commandList = Get-Command -Module $ModuleName
-    
+    $commandList = (Import-Module ".\$ModuleName" -PassThru).ExportedFunctions.Values
     # cleanup PS session
     Unload-SUT
  
     Write-Output "    Calculating fingerprint"
-    $fingerprint = foreach ($command in $commandList )
-    {
-        foreach ($parameter in $command.parameters.keys)
-        {
-            '{0}:{1}' -f $command.name, $command.parameters[$parameter].Name
-            $command.parameters[$parameter].aliases | Foreach-Object { '{0}:{1}' -f $command.name, $_}
-        }
-    }
+    $fingerprint = $commandList | CalculateFingerprint
      
-    if (Test-Path .\fingerprint)
-    {
-        $oldFingerprint = Get-Content .\fingerprint
-    }
+    $oldFingerprint = $previousModuleInfo.Fingerprint
      
     $bumpVersionType = 'Patch'
     '    Detecting new features'
     $fingerprint | Where {$_ -notin $oldFingerprint } | % {$bumpVersionType = 'Minor'; "      $_"}    
     '    Detecting breaking changes'
     $oldFingerprint | Where {$_ -notin $fingerprint } | % {$bumpVersionType = 'Major'; "      $_"}
- 
-    Set-Content -Path .\fingerprint -Value $fingerprint
  
     # Bump the module version
     $version = [version] (Get-Metadata -Path $manifestPath -PropertyName 'ModuleVersion')
@@ -204,8 +278,7 @@ Task BuildPSD1 -inputs (Get-ChildItem $Source -Recurse -File) -Outputs $Manifest
         }       
     }
 
-    $publishedVersion = Import-Clixml -Path "$output\version.xml"
-
+    $publishedVersion = $previousModuleInfo.Version
     if ( $version -lt $publishedVersion )
     {
         $version = $publishedVersion
