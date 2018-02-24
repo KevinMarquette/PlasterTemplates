@@ -85,7 +85,7 @@ function Read-Module {
             Set-Item -Path Env:\PSModulePath -Value $revisedPath  -EA Stop
 
             try {
-                Save-Module -Name $Name -Path $Path -Repository $Repository -RequiredVersion 1.0.0 -EA Stop
+                Save-Module -Name $Name -Path $Path -Repository $Repository -EA Stop
                 Import-Module "$Path\$Name" -PassThru -EA Stop
             }
             finally {
