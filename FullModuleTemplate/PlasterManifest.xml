@@ -19,6 +19,7 @@
   </parameters>
   <content>
     <message>      Creating folder structure    </message>
+    <file source='' destination='demos'/>
     <file source='' destination='docs\images'/>
     <file source='' destination='tests'/>
     <file source='' destination='spec'/>
@@ -45,6 +46,11 @@
     <templateFile source='readme.md' destination=''/>
     <templateFile source='LICENSE' destination=''/>
     <file source='module.build.ps1' destination=''/>
+    <file source='demos\run-compiled.bat' destination=''/>
+    <templateFile source='demos\run-compiled.ps1' destination=''/>
+    <file source='demos\run-sources.bat' destination=''/>
+    <templateFile source='demos\run-sources.ps1' destination=''/>
+    <file source='demos\Set-PSModulePath.ps1' destination=''/>
     <templateFile source='docs\about.md' destination=''/>
     <templateFile source='docs\acknowledgements.md' destination=''/>
     <templateFile source='docs\index.md' destination=''/>

@@ -11,7 +11,7 @@ $global:SUTPath = $script:ManifestPath
 
 Task Init SetAsLocal, InstallSUT
 Task Default Build, Pester, Publish
-Task Build CopyToOutput, BuildPSM1, BuildPSD1, InstallSUT
+Task Build InstallSUT, CopyToOutput, BuildPSM1, BuildPSD1
 Task Pester Build, UnitTests, FullTests
 
 function CalculateFingerprint {
@@ -85,7 +85,7 @@ function Read-Module {
             Set-Item -Path Env:\PSModulePath -Value $revisedPath  -EA Stop
 
             try {
-                Save-Module -Name $Name -Path $Path -Repository $Repository -RequiredVersion 1.0.0 -EA Stop
+                Save-Module -Name $Name -Path $Path -Repository $Repository -EA Stop
                 Import-Module "$Path\$Name" -PassThru -EA Stop
             }
             finally {
