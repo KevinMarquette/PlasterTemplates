@@ -11,7 +11,7 @@ $global:SUTPath = $script:ManifestPath
 
 Task Init SetAsLocal, InstallSUT
 Task Default Build, Pester, Publish
-Task Build CopyToOutput, BuildPSM1, BuildPSD1, InstallSUT
+Task Build InstallSUT, CopyToOutput, BuildPSM1, BuildPSD1
 Task Pester Build, UnitTests, FullTests
 
 function CalculateFingerprint {
