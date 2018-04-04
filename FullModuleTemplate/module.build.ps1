@@ -118,6 +118,38 @@ function Read-Module {
     $PowerShell.Invoke()
 }
 
+function RunTests {
+    param(
+        [string] $Path,
+        [string] $ExcludeTag
+    )
+    $params = @{
+        Path = $Path
+        PassThru = $true
+        OutputFormat = 'NUnitXml'
+        OutputFile = $script:TestFile
+        Tag = 'Build'
+    }
+    if ($ExcludeTag) {
+        $params['ExcludeTag'] = $ExcludeTag
+    }
+
+    $testResults = Invoke-Pester @params
+
+    PublishTestResults $script:TestFile
+
+    if ($testResults.FailedCount -gt 0)
+    {
+        $testResults.TestResult | Where-Object Passed -eq $false |
+            Select-Object -Property FailureMessage, @{ n='Description'; e={ "$($_.Describe), $($_.Context), $($_.Name)" }} |
+            ForEach-Object {
+                # using Write-Host instead of Write-Warning to avoid Invoke-Build duplicating this message when writing it's summary
+                Write-Host "$($_.Description)... $($_.FailureMessage)" -ForegroundColor Yellow
+            }
+        Write-Error "Failed [$($testResults.FailedCount)] Pester tests"
+    }
+}
+
 Task InstallSUT {
     Invoke-PSDepend -Path "$PSScriptRoot\test.depend.psd1" -Install -Force
 }
@@ -133,22 +165,11 @@ Task Clean {
 }
 
 Task UnitTests {
-    $TestResults = Invoke-Pester -Path Tests\*unit* -PassThru -Tag Build -ExcludeTag Slow
-    if ($TestResults.FailedCount -gt 0)
-    {
-        Write-Error "Failed [$($TestResults.FailedCount)] Pester tests"
-    }
+    RunTests -Path Tests\*unit* -ExcludeTag Slow
 }
 
 Task FullTests {
-    $TestResults = Invoke-Pester -Path Tests -PassThru -OutputFormat NUnitXml -OutputFile $testFile -Tag Build
-
-    PublishTestResults $testFile
-    
-    if ($TestResults.FailedCount -gt 0)
-    {
-        Write-Error "Failed [$($TestResults.FailedCount)] Pester tests"
-    }
+    RunTests -Path Tests
 }
 
 Task Specification {
